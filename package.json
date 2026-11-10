@@ -1,0 +1,27 @@
+{
+  "name": "navix-agent",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Manifest V3 browser agent side panel that drives Chrome via CDP and talks to any OpenAI-compatible endpoint.",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "e2e": "node tests/e2e.cjs",
+    "e2e:drag": "node tests/e2e-drag.cjs",
+    "e2e:parity": "node tests/e2e-parity.cjs",
+    "e2e:ui": "node tests/e2e-ui.cjs",
+    "e2e:retry": "node tests/e2e-retry.cjs",
+    "e2e:context": "node tests/e2e-context.cjs",
+    "e2e:all": "node tests/e2e.cjs && node tests/e2e-drag.cjs && node tests/e2e-parity.cjs && node tests/e2e-ui.cjs && node tests/e2e-retry.cjs && node tests/e2e-context.cjs",
+    "screenshots": "node scripts/screenshots/capture.cjs",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "@types/node": "^26.6.6",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

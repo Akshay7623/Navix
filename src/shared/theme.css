@@ -1,0 +1,134 @@
+/*
+ * Design tokens shared by the side panel and the options page.
+ * Dark is the default; light follows the system setting.
+ */
+:root {
+  color-scheme: dark;
+
+  --bg: #0c0e12;
+  --surface: #14171d;
+  --surface-2: #1b1f27;
+  --surface-3: #242a34;
+  --line: #232833;
+  --line-strong: #323946;
+
+  --text: #e9ebf1;
+  --text-2: #a7afbd;
+  --text-3: #6e7787;
+
+  --accent: #9a8cff;
+  --accent-strong: #6e5ff6;
+  --accent-soft: rgb(154 140 255 / 0.13);
+  --accent-line: rgb(154 140 255 / 0.38);
+  --on-accent: #ffffff;
+
+  --ok: #3fcf8e;
+  --ok-soft: rgb(63 207 142 / 0.13);
+  --warn: #f1b44c;
+  --warn-soft: rgb(241 180 76 / 0.12);
+  --err: #ff6b6b;
+  --err-soft: rgb(255 107 107 / 0.12);
+
+  --user-bubble: #2a2552;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-2: 0 10px 30px rgb(0 0 0 / 0.45), 0 2px 6px rgb(0 0 0 / 0.3);
+
+  --r-sm: 7px;
+  --r-md: 10px;
+  --r-lg: 14px;
+
+  --font: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --bg: #f6f6f9;
+    --surface: #ffffff;
+    --surface-2: #f0f1f5;
+    --surface-3: #e6e8ee;
+    --line: #e4e6ec;
+    --line-strong: #d2d6de;
+
+    --text: #13151b;
+    --text-2: #4c5463;
+    --text-3: #868d9b;
+
+    --accent: #5a4bf0;
+    --accent-strong: #5a4bf0;
+    --accent-soft: rgb(90 75 240 / 0.09);
+    --accent-line: rgb(90 75 240 / 0.32);
+
+    --ok: #0f9d63;
+    --ok-soft: rgb(15 157 99 / 0.1);
+    --warn: #b7790b;
+    --warn-soft: rgb(214 150 20 / 0.12);
+    --err: #dc3e42;
+    --err-soft: rgb(220 62 66 / 0.09);
+
+    --user-bubble: #e9e6ff;
+
+    --shadow-1: 0 1px 2px rgb(16 18 27 / 0.06);
+    --shadow-2: 0 12px 32px rgb(16 18 27 / 0.14), 0 2px 6px rgb(16 18 27 / 0.06);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.icon {
+  flex: 0 0 auto;
+  display: block;
+}
+
+/* Hidden from view, still read by screen readers and textContent. */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.logo {
+  flex: 0 0 auto;
+  display: block;
+  border-radius: 28%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

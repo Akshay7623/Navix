@@ -1,0 +1,27 @@
+# Dependencies (npm install restores them)
+node_modules/
+
+# Build output (npm run build recreates it)
+dist/
+*.tsbuildinfo
+
+# Packaged extension and its signing key (never commit the .pem)
+*.zip
+*.crx
+*.pem
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navix Agent</title>
+    <link rel="stylesheet" href="../shared/theme.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button
+          id="historyBtn"
+          class="icon-btn"
+          title="Chat history"
+          aria-label="Chat history"
+          aria-expanded="false"
+          aria-controls="historyPanel"
+          data-icon="history"
+          data-icon-size="17"
+        ></button>
+        <div class="brand">
+          <span data-logo="20"></span>
+          <span class="brand-name">Navix Agent</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button
+          id="exportGif"
+          class="icon-btn hidden"
+          title="Download run recording (GIF)"
+          aria-label="Download run recording"
+          data-icon="download"
+          data-icon-size="17"
+        ></button>
+        <button id="newChat" class="icon-btn" title="New chat" aria-label="New chat" data-icon="plus" data-icon-size="18"></button>
+        <button id="openOptions" class="icon-btn" title="Settings" aria-label="Settings" data-icon="settings" data-icon-size="17"></button>
+      </div>
+    </header>
+
+    <aside id="historyPanel" class="history hidden" aria-label="Chat history">
+      <div class="history-head">
+        <span class="history-title">History</span>
+        <button id="historyClear" class="history-clear" title="Delete all conversations">Clear all</button>
+        <button id="historyClose" class="icon-btn" title="Close" aria-label="Close history" data-icon="x" data-icon-size="16"></button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </aside>
+    <div id="historyScrim" class="history-scrim hidden"></div>
+
+    <main id="transcript" class="transcript">
+      <div class="empty" id="emptyState">
+        <div class="empty-mark" data-logo="44"></div>
+        <h1 class="empty-title">What should I do on this page?</h1>
+        <p class="empty-body">
+          I read the page, then click, type and scroll in the current tab and report back.
+          You approve each site before I act on it.
+        </p>
+        <div class="suggestions">
+          <button class="chip" data-prompt="Summarize this page in five bullet points.">
+            <span class="chip-icon" data-icon="text"></span>
+            <span class="chip-text">
+              <span class="chip-title">Summarize this page</span>
+              <span class="chip-sub">Five bullet points</span>
+            </span>
+          </button>
+          <button class="chip" data-prompt="Find the pricing section and tell me what the cheapest plan costs.">
+            <span class="chip-icon" data-icon="search"></span>
+            <span class="chip-text">
+              <span class="chip-title">Find pricing</span>
+              <span class="chip-sub">What the cheapest plan costs</span>
+            </span>
+          </button>
+          <button class="chip" data-prompt="Fill in the search box with 'open source browser agents' and submit it.">
+            <span class="chip-icon" data-icon="keyboard"></span>
+            <span class="chip-text">
+              <span class="chip-title">Run a search</span>
+              <span class="chip-sub">Type a query and submit it</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <div class="dock">
+      <div id="activity" class="activity hidden" role="status" aria-live="polite">
+        <span class="activity-pulse"></span>
+        <span id="activityText" class="activity-text">Starting</span>
+        <span id="activityStep" class="activity-step"></span>
+        <span id="activityTime" class="activity-time">0s</span>
+      </div>
+
+      <section id="planBar" class="plan collapsed idle hidden" aria-label="Plan">
+        <button id="planToggle" class="plan-head" type="button" aria-expanded="false" aria-controls="planList" title="Show or hide the plan">
+          <span class="plan-icon" data-icon="list" data-icon-size="15"></span>
+          <span class="plan-title">Plan</span>
+          <span id="planCurrent" class="plan-current"></span>
+          <span id="planProgress" class="plan-progress"></span>
+          <span class="plan-chevron" data-icon="chevron" data-icon-size="14"></span>
+        </button>
+        <div class="plan-meter"><span id="planMeter" class="plan-meter-fill"></span></div>
+        <ol id="planList" class="plan-list"></ol>
+      </section>
+
+      <section id="approvalBar" class="approval hidden" role="alertdialog" aria-labelledby="approvalTitle">
+        <div class="approval-top">
+          <span class="approval-icon" data-icon="shield" data-icon-size="18"></span>
+          <div class="approval-text">
+            <div id="approvalTitle" class="approval-title">Allow <strong id="approvalTool">this action</strong>?</div>
+            <div id="approvalOrigin" class="approval-origin"></div>
+            <div id="approvalDetail" class="approval-detail"></div>
+          </div>
+        </div>
+        <div class="approval-actions">
+          <label class="remember">
+            <input type="checkbox" id="approvalRemember" class="switch" checked />
+            Remember for this site
+          </label>
+          <button id="approvalDeny" class="btn ghost" type="button">Deny</button>
+          <button id="approvalAllow" class="btn primary" type="button">Allow</button>
+        </div>
+      </section>
+    </div>
+
+    <footer class="composer">
+      <div class="composer-box">
+        <textarea
+          id="prompt"
+          rows="1"
+          placeholder="Ask me to do something on this page…"
+          spellcheck="false"
+          aria-label="Message"
+        ></textarea>
+        <div class="composer-row">
+          <div id="tabChip" class="tab-chip" title="The tab the agent acts on">
+            <img id="tabFavicon" class="tab-favicon hidden" alt="" width="14" height="14" />
+            <span id="tabFallback" class="tab-fallback" data-icon="globe" data-icon-size="14"></span>
+            <span id="tabTitle" class="tab-title">Current tab</span>
+          </div>
+          <button id="modelChip" class="model-chip" type="button" title="Model · open settings">
+            <span class="dot" id="statusDot"></span>
+            <span id="modelLabel" class="model">—</span>
+          </button>
+          <button id="send" class="send" title="Send (Enter)" aria-label="Send" data-icon="send" data-icon-size="17" disabled></button>
+          <button id="stop" class="stop hidden" title="Stop" aria-label="Stop" data-icon="stop" data-icon-size="14"></button>
+        </div>
+      </div>
+      <div class="composer-hint">Enter to send · Shift+Enter for a new line</div>
+    </footer>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

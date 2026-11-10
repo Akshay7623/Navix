@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navix Agent — Settings</title>
+    <link rel="stylesheet" href="../shared/theme.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="side">
+        <div class="side-brand">
+          <span data-logo="30"></span>
+          <div>
+            <div class="side-name">Navix Agent</div>
+            <div class="side-sub">Settings</div>
+          </div>
+        </div>
+        <nav class="side-nav" aria-label="Sections">
+          <a href="#provider-section" class="nav-link"><span data-icon="plug"></span>Model provider</a>
+          <a href="#generation-section" class="nav-link"><span data-icon="cpu"></span>Generation</a>
+          <a href="#safety-section" class="nav-link"><span data-icon="shield"></span>Safety &amp; approvals</a>
+          <a href="#sites-section" class="nav-link"><span data-icon="globe"></span>Remembered sites</a>
+        </nav>
+        <p class="side-foot">
+          <span data-icon="info" data-icon-size="14"></span>
+          Everything is stored locally in this browser profile.
+        </p>
+      </aside>
+
+      <main class="content" id="form">
+        <header class="page-head">
+          <div class="page-brand" data-logo="34"></div>
+          <div>
+            <h1>Settings</h1>
+            <p>Choose the model the agent talks to, how hard it thinks, and when it asks before acting.</p>
+          </div>
+        </header>
+
+        <section id="provider-section" class="card" aria-labelledby="provider-title">
+          <div class="card-head">
+            <span class="card-icon" data-icon="plug" data-icon-size="18"></span>
+            <div>
+              <h2 id="provider-title">Model provider</h2>
+              <p>Where the agent sends its requests. Any OpenAI-compatible endpoint with tool calling works.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="presetLabel">Preset</span>
+            <select id="provider" aria-labelledby="presetLabel"></select>
+            <div id="providerCards" class="preset-grid" role="radiogroup" aria-labelledby="presetLabel"></div>
+          </div>
+
+          <label class="field">
+            <span class="label">API URL</span>
+            <input id="baseUrl" type="url" spellcheck="false" placeholder="https://api.deepseek.com/v1/chat/completions" />
+            <small id="baseUrlHint">Requests go to <code id="endpointPreview">—</code>, exactly as typed.</small>
+          </label>
+
+          <div class="field">
+            <label class="label" for="apiKey">API key</label>
+            <div class="input-wrap">
+              <input id="apiKey" type="password" spellcheck="false" placeholder="sk-…" autocomplete="off" />
+              <button id="toggleKey" class="input-btn" type="button" title="Show key" aria-label="Show key" aria-pressed="false"></button>
+            </div>
+            <small>Kept in <code>chrome.storage.local</code> and sent only to the API URL above. For a Modal server, use the proxy token as <code>id.secret</code>.</small>
+          </div>
+
+          <label class="field">
+            <span class="label">Model</span>
+            <input id="model" type="text" list="modelList" spellcheck="false" placeholder="deepseek-chat" />
+            <datalist id="modelList"></datalist>
+          </label>
+
+          <p class="note" id="providerNotes"></p>
+        </section>
+
+        <section id="generation-section" class="card" aria-labelledby="generation-title">
+          <div class="card-head">
+            <span class="card-icon" data-icon="cpu" data-icon-size="18"></span>
+            <div>
+              <h2 id="generation-title">Generation</h2>
+              <p>How much the model thinks, and how long one task may run.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="effortLabel">Reasoning effort</span>
+            <select id="reasoningEffort" data-segmented aria-labelledby="effortLabel">
+              <option value="low" data-short="Low" data-desc="Fastest. Brief thinking before each step.">Low — fastest, brief thinking</option>
+              <option value="medium" data-short="Medium" data-desc="Balanced speed and care. Recommended for browsing tasks.">Medium</option>
+              <option value="xhigh" data-short="Extra high" data-desc="Slowest. Long thinking before every step, including simple clicks.">Extra high — slowest, longest thinking</option>
+              <option value="default" data-short="Server default" data-desc="Sends nothing; the model's chat template decides (extra high for Qwen3.8). Use this if your endpoint rejects the field.">Server default (send nothing)</option>
+            </select>
+            <small>
+              Sent to custom endpoints only, as <code>chat_template_kwargs.reasoning_effort</code> (Qwen3.5-family templates on vLLM or SGLang).
+            </small>
+          </div>
+
+          <div class="grid3">
+            <label class="field">
+              <span class="label">Temperature</span>
+              <input id="temperature" type="number" min="0" max="2" step="0.1" />
+              <small>0 is most predictable.</small>
+            </label>
+            <label class="field">
+              <span class="label">Max tokens</span>
+              <input id="maxTokens" type="number" min="256" max="65536" step="256" />
+              <small>Per reply, thinking included.</small>
+            </label>
+            <label class="field">
+              <span class="label">Max steps</span>
+              <input id="maxSteps" type="number" min="1" max="100" step="1" />
+              <small>Model calls per task.</small>
+            </label>
+          </div>
+
+          <label class="field">
+            <span class="label">Extra system prompt</span>
+            <textarea id="systemPromptExtra" rows="3" placeholder="Optional. Appended to the built-in agent instructions."></textarea>
+          </label>
+
+          <label class="toggle-row">
+            <span class="toggle-text">
+              <span class="toggle-title">Send screenshots to the model</span>
+              <span class="toggle-sub">Only for vision-capable models. Text-only models reject image parts.</span>
+            </span>
+            <input id="visionEnabled" type="checkbox" class="switch" />
+          </label>
+        </section>
+
+        <section id="safety-section" class="card" aria-labelledby="safety-title">
+          <div class="card-head">
+            <span class="card-icon" data-icon="shield" data-icon-size="18"></span>
+            <div>
+              <h2 id="safety-title">Safety &amp; approvals</h2>
+              <p>When the agent must ask before clicking or typing. Banking, government, health and password-manager sites are always blocked.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label" id="approvalLabel">Approval mode</span>
+            <select id="approvalMode" data-segmented aria-labelledby="approvalLabel">
+              <option value="ask" data-short="Ask per site" data-desc="Asks the first time it acts on a site, and remembers your answer if you tick Remember.">Ask per domain (remember my choice)</option>
+              <option value="auto" data-short="Act without asking" data-desc="Only honoured on sites classified as safe or caution. Restricted and unrecognised sites still ask.">Act without asking</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="label" id="safetyLabel">Site safety</span>
+            <select id="safetyMode" data-segmented aria-labelledby="safetyLabel">
+              <option value="standard" data-short="Standard" data-desc="Asks on restricted and unknown sites.">Standard — prompt on restricted and unknown sites</option>
+              <option value="permissive" data-short="Permissive" data-desc="Only blocked sites are refused; everything else follows the approval mode.">Permissive — only prompt on blocked sites</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="label" id="dialogLabel">JavaScript dialogs</span>
+            <select id="dialogPolicy" data-segmented aria-labelledby="dialogLabel">
+              <option value="dismiss" data-short="Dismiss" data-desc="alert, confirm and prompt are cancelled so they never freeze the page. The agent can read them with read_dialogs.">Dismiss alert/confirm/prompt</option>
+              <option value="accept" data-short="Accept" data-desc="alert, confirm and prompt are accepted automatically. The agent can read them with read_dialogs.">Accept alert/confirm/prompt</option>
+            </select>
+          </div>
+
+          <label class="toggle-row">
+            <span class="toggle-text">
+              <span class="toggle-title">Show a cursor and working badge on the page</span>
+              <span class="toggle-sub">Draws where the agent clicks. Purely cosmetic.</span>
+            </span>
+            <input id="visualFeedback" type="checkbox" class="switch" />
+          </label>
+        </section>
+
+        <section id="sites-section" class="card" aria-labelledby="sites-title">
+          <div class="card-head">
+            <span class="card-icon" data-icon="globe" data-icon-size="18"></span>
+            <div>
+              <h2 id="sites-title">Remembered sites</h2>
+              <p>Sites where you ticked Remember on an approval. Remove one to be asked again.</p>
+            </div>
+            <button id="clearPerms" class="btn ghost small" type="button">Clear all</button>
+          </div>
+          <ul id="permList" class="perm-list"></ul>
+        </section>
+      </main>
+    </div>
+
+    <footer class="savebar">
+      <div class="savebar-inner">
+        <span id="dirty" class="dirty hidden"><span class="dirty-dot"></span>Unsaved changes</span>
+        <span id="status" class="status" role="status"></span>
+        <span class="savebar-hint">Ctrl+S</span>
+        <button id="save" class="btn primary" type="button">Save changes</button>
+      </div>
+    </footer>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
